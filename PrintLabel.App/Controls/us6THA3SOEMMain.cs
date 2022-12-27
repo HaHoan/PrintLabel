@@ -87,6 +87,17 @@ namespace PrintLabel.App.Controls
         private string pathLog = @"C:\Logs\6THA3SOEMMain";
         List<string> years = new List<string>();
         List<string> months = new List<string>();
+        bool WOError(Control control)
+        {
+            if (control.Text == "" || control.Text == null || control.Text.Length != 10)
+            {
+                errorProvider1.Clear();
+                errorProvider1.SetError(control, "Required field!");
+                control.Focus();
+                return false;
+            }
+            return true;
+        }
         List<string> days = new List<string>();
         bool FieldError(Control control)
         {
@@ -335,12 +346,23 @@ namespace PrintLabel.App.Controls
             {
                 return;
             }
+            else if (WOError(txtWO) == false)
+            {
+                return;
+            }
             else if (FieldError(txtASSYNo) == false)
             {
                 return;
             }
             else
             {
+                int index = cboModels.FindStringExact(cboModels.Text);
+                if(index < 0)
+                {
+                    MessageBox.Show("Model not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    return;
+                }
+                _model = (OEMMainEntity)cboModels.Items[index];
                 //string model = _model.model;
                 //string rev = _model.REV;
                 //string barcode = _model.REV;
@@ -416,6 +438,7 @@ namespace PrintLabel.App.Controls
             }
 
             // Log Print system
+            if (FieldError(txtPathLog) == false) return;
             string logPrint = txtPathLog.Text;
             if (!Directory.Exists(logPrint))
             {
@@ -445,6 +468,7 @@ namespace PrintLabel.App.Controls
 
             try
             {
+                Ultils.SaveToDb(dataGridView1,txtWO.Text.Trim());
                 Ultils.WriteCSV(dataGridView1, fileName);
                 Ultils.WriteAppendCSV(dataGridView1, true, newLog);
                 MessageBox.Show("Export success!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -453,6 +477,7 @@ namespace PrintLabel.App.Controls
                 txtQuantity.ResetText();
                 cboModels.ResetText();
                 txtASSYNo.ResetText();
+                txtWO.ResetText();
                 dataGridView1.DataSource = null;
                 dataGridView1.Refresh();
             }
@@ -467,7 +492,6 @@ namespace PrintLabel.App.Controls
 
             if (Visible && !Disposing)
             {
-                new frmSelectModel().ShowDialog();
                 GetModel(Program.ModelSelect);
             }
         }
@@ -529,6 +553,37 @@ namespace PrintLabel.App.Controls
             txtQuantity.Focus();
 
 
+        }
+
+        private void txtQuantity_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            usCommon.txtQuantity_KeyPress(sender, e);
+        }
+
+        private void txtQuantity_Validating(object sender, CancelEventArgs e)
+        {
+            usCommon.txtQuantity_Validating(sender, e, txtQuantity, errorProvider1);
+        }
+
+        private void txtQuantity_TextChanged(object sender, EventArgs e)
+        {
+            usCommon.txtQuantity_TextChanged(sender, e, errorProvider1);
+        }
+
+        private void txtWO_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnGenerateSerial.PerformClick();
+            }
+        }
+
+        private void txtQuantity_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                txtWO.Focus();
+            }
         }
     }
 }

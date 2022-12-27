@@ -65,22 +65,6 @@ namespace PrintLabel.App.Controls
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="control"></param>
-        /// <returns></returns>
-        bool FieldError(Control control)
-        {
-            if (control.Text == "" || control.Text == null)
-            {
-                errorProvider1.Clear();
-                errorProvider1.SetError(control, "Required field!");
-                control.Focus();
-                return false;
-            }
-            return true;
-        }
 
         /// <summary>
         /// 
@@ -89,15 +73,19 @@ namespace PrintLabel.App.Controls
         /// <param name="e"></param>
         private void btnGenerateSerial_Click(object sender, EventArgs e)
         {
-            if (FieldError(cboModels) == false)
+            if (usCommon.FieldError(cboModels, errorProvider1) == false)
             {
                 return;
             }
-            else if (FieldError(txtQuantity) == false)
+            else if (usCommon.FieldError(txtQuantity, errorProvider1) == false)
             {
                 return;
             }
-            else if (FieldError(txtASSYNo) == false)
+            else if (usCommon.FieldError(txtASSYNo, errorProvider1) == false)
+            {
+                return;
+            }
+            else if (usCommon.WOError(txtWo, errorProvider1) == false)
             {
                 return;
             }
@@ -147,7 +135,7 @@ namespace PrintLabel.App.Controls
             if (pathLog == null || pathLog == "")
             {
                 MessageBox.Show("Please select the path to save the log file!", "Error path logs", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                FieldError(txtPathLog);
+                usCommon.FieldError(txtPathLog,errorProvider1);
                 return;
             }
 
@@ -204,6 +192,7 @@ namespace PrintLabel.App.Controls
         }
         public void GetModel(string modelNo)
         {
+            if (usCommon.FieldError(cboModels,errorProvider1) == false) return;
             var data = Ultils.ReadAllLines(path, Encoding.ASCII).SingleOrDefault(c => c.Contains(modelNo));
             if (data == null)
             {
@@ -287,7 +276,7 @@ namespace PrintLabel.App.Controls
         {
             if (txtQuantity.Text != "")
             {
-                if (FieldError(txtQuantity) == true)
+                if (usCommon.FieldError(txtQuantity,errorProvider1) == true)
                 {
                     double qty = double.Parse(txtQuantity.Text);
                     if (qty > 999999)
@@ -355,7 +344,6 @@ namespace PrintLabel.App.Controls
 
             if (Visible && !Disposing)
             {
-                new frmSelectModel().ShowDialog();
                 GetModel(Program.ModelSelect);
             }
         }

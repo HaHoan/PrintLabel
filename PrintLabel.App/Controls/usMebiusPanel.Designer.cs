@@ -30,6 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.txtWo = new System.Windows.Forms.MaskedTextBox();
             this.lblPathLog = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.txtPathLog = new System.Windows.Forms.TextBox();
@@ -59,6 +61,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label8);
+            this.groupBox1.Controls.Add(this.txtWo);
             this.groupBox1.Controls.Add(this.lblPathLog);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.txtPathLog);
@@ -82,10 +86,29 @@
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(5, 10);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(733, 139);
+            this.groupBox1.Size = new System.Drawing.Size(733, 169);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(273, 137);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(29, 13);
+            this.label8.TabIndex = 21;
+            this.label8.Text = "WO:";
+            // 
+            // txtWo
+            // 
+            this.txtWo.Location = new System.Drawing.Point(309, 134);
+            this.txtWo.Mask = "0000000000";
+            this.txtWo.Name = "txtWo";
+            this.txtWo.Size = new System.Drawing.Size(81, 20);
+            this.txtWo.TabIndex = 22;
+            this.txtWo.TextChanged += new System.EventHandler(this.txtQuantity_TextChanged);
+            this.txtWo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtQuantity_KeyPress);
             // 
             // lblPathLog
             // 
@@ -144,7 +167,6 @@
             // lblAddModel
             // 
             this.lblAddModel.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblAddModel.Enabled = false;
             this.lblAddModel.Image = global::PrintLabel.App.Properties.Resources.plus_16;
             this.lblAddModel.Location = new System.Drawing.Point(451, 52);
             this.lblAddModel.Name = "lblAddModel";
@@ -196,7 +218,6 @@
             // 
             // cboModels
             // 
-            this.cboModels.Enabled = false;
             this.cboModels.FormattingEnabled = true;
             this.cboModels.Location = new System.Drawing.Point(310, 55);
             this.cboModels.Name = "cboModels";
@@ -284,10 +305,10 @@
             this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(5, 149);
+            this.dataGridView1.Location = new System.Drawing.Point(5, 179);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(733, 409);
+            this.dataGridView1.Size = new System.Drawing.Size(733, 379);
             this.dataGridView1.TabIndex = 3;
             // 
             // errorProvider1
@@ -342,5 +363,7 @@
         private System.Windows.Forms.Label lblPathLog;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txtPathLog;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.MaskedTextBox txtWo;
     }
 }

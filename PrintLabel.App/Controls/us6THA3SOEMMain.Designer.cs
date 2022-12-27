@@ -51,6 +51,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtWO = new System.Windows.Forms.MaskedTextBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.txtRev = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.txtSerialBegin = new System.Windows.Forms.TextBox();
@@ -112,7 +114,6 @@
             // lblAddModel
             // 
             this.lblAddModel.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblAddModel.Enabled = false;
             this.lblAddModel.Image = global::PrintLabel.App.Properties.Resources.plus_16;
             this.lblAddModel.Location = new System.Drawing.Point(468, 26);
             this.lblAddModel.Name = "lblAddModel";
@@ -173,7 +174,6 @@
             // 
             // cboModels
             // 
-            this.cboModels.Enabled = false;
             this.cboModels.FormattingEnabled = true;
             this.cboModels.Items.AddRange(new object[] {
             ""});
@@ -207,6 +207,10 @@
             this.txtQuantity.Name = "txtQuantity";
             this.txtQuantity.Size = new System.Drawing.Size(113, 20);
             this.txtQuantity.TabIndex = 5;
+            this.txtQuantity.TextChanged += new System.EventHandler(this.txtQuantity_TextChanged);
+            this.txtQuantity.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtQuantity_KeyPress);
+            this.txtQuantity.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtQuantity_PreviewKeyDown);
+            this.txtQuantity.Validating += new System.ComponentModel.CancelEventHandler(this.txtQuantity_Validating);
             // 
             // label3
             // 
@@ -268,11 +272,13 @@
             this.dataGridView1.Location = new System.Drawing.Point(3, 16);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(758, 465);
+            this.dataGridView1.Size = new System.Drawing.Size(758, 438);
             this.dataGridView1.TabIndex = 5;
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txtWO);
+            this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.txtRev);
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.txtSerialBegin);
@@ -300,10 +306,30 @@
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(764, 158);
+            this.groupBox1.Size = new System.Drawing.Size(764, 185);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options";
+            // 
+            // txtWO
+            // 
+            this.txtWO.Location = new System.Drawing.Point(344, 156);
+            this.txtWO.Mask = "0000000000";
+            this.txtWO.Name = "txtWO";
+            this.txtWO.Size = new System.Drawing.Size(113, 20);
+            this.txtWO.TabIndex = 25;
+            this.txtWO.TextChanged += new System.EventHandler(this.txtQuantity_TextChanged);
+            this.txtWO.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtQuantity_KeyPress);
+            this.txtWO.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtWO_PreviewKeyDown);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(292, 161);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(29, 13);
+            this.label10.TabIndex = 24;
+            this.label10.Text = "WO:";
             // 
             // txtRev
             // 
@@ -348,9 +374,9 @@
             // 
             this.groupBox2.Controls.Add(this.dataGridView1);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox2.Location = new System.Drawing.Point(0, 158);
+            this.groupBox2.Location = new System.Drawing.Point(0, 185);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(764, 484);
+            this.groupBox2.Size = new System.Drawing.Size(764, 457);
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             // 
@@ -401,5 +427,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox txtRev;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.MaskedTextBox txtWO;
+        private System.Windows.Forms.Label label10;
     }
 }

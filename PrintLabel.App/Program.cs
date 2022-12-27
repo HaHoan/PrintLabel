@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
+using VBSQLHelper;
 
 namespace PrintLabel.App
 {
@@ -14,6 +15,11 @@ namespace PrintLabel.App
         [STAThread]
         static void Main()
         {
+            SQLHelper.SERVER_NAME = "172.28.10.17";
+            SQLHelper.USERNAME_DB = "sa";
+            SQLHelper.PASSWORD_DB = "umc@2019";
+            SQLHelper.DATABASE = "UMCVN_BASE";
+            SQLHelper.ConnectString();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             CurrentUser = new User();

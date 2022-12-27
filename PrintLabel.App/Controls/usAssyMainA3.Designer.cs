@@ -45,6 +45,8 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.txtWo = new System.Windows.Forms.MaskedTextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
@@ -52,6 +54,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txtWo);
+            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.lblPathLog);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.txtPathLog);
@@ -104,7 +108,6 @@
             // lblAddModel
             // 
             this.lblAddModel.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblAddModel.Enabled = false;
             this.lblAddModel.Image = global::PrintLabel.App.Properties.Resources.plus_16;
             this.lblAddModel.Location = new System.Drawing.Point(468, 26);
             this.lblAddModel.Name = "lblAddModel";
@@ -155,7 +158,6 @@
             // 
             // cboModels
             // 
-            this.cboModels.Enabled = false;
             this.cboModels.FormattingEnabled = true;
             this.cboModels.Items.AddRange(new object[] {
             ""});
@@ -225,6 +227,23 @@
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // txtWo
+            // 
+            this.txtWo.Location = new System.Drawing.Point(344, 104);
+            this.txtWo.Mask = "0000000000";
+            this.txtWo.Name = "txtWo";
+            this.txtWo.Size = new System.Drawing.Size(113, 20);
+            this.txtWo.TabIndex = 19;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(307, 107);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 13);
+            this.label1.TabIndex = 18;
+            this.label1.Text = "WO:";
+            // 
             // usAssyMainA3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -261,5 +280,7 @@
         private System.Windows.Forms.Label lblPathLog;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txtPathLog;
+        private System.Windows.Forms.MaskedTextBox txtWo;
+        private System.Windows.Forms.Label label1;
     }
 }

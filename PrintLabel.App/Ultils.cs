@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using PrintLabel.App._6THA3SOEMMain;
+using PrintLabel.App.Database;
 using System;
 using System.Collections.Generic;
 using System.Deployment.Application;
@@ -179,6 +180,31 @@ namespace PrintLabel.App
                 sr.Dispose();
                 return value;
             }
+        }
+        public static void SaveToDb(DataGridView gridIn, string orderNo)
+        {
+            var kyoResponsitory = new PMS_Kyo_InitResonsibility();
+            if (gridIn.RowCount > 0)
+            {
+                DataGridViewRow dr = new DataGridViewRow();
+                var list = new List<PMS_Kyo_Init>();
+                for (int j = 0; j <= gridIn.Rows.Count - 1; j++)
+                {
+                    dr = gridIn.Rows[j];
+                    var createTime = DateTime.Now;
+                    list.Add(new PMS_Kyo_Init()
+                    {
+                        PRODUCT_ID = dr.Cells[0].Value.ToString(),
+                        ORDER_NO = orderNo,
+                        BOARD_NO = dr.Cells[2].Value.ToString(),
+                        UPD_TIME = createTime,
+                        CREATE_AT = createTime,
+                        ASSY_NO = dr.Cells[1].Value.ToString()
+                    });
+                }
+                kyoResponsitory.AddList(list);
+            }
+
         }
 
         /// <summary>

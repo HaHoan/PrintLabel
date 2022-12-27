@@ -155,6 +155,12 @@ namespace PrintLabel.App
             AddTabPage(new us6THA3SOEMMain(), "OEM");
         }
 
+        private void btnPrintAgain_Click(object sender, EventArgs e)
+        {
+            AddTabPage(new usPrintAgain(), "PrintAgain");
+        }
+
+
         //private void btn6ThA3SOEM_Click_1(object sender, EventArgs e)
         //{
         //    AddTabPage(new us6THA3SOEMEngine(), "6TH A3S OEM Engine");

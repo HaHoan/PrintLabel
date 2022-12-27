@@ -30,14 +30,12 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.lblPathLog = new System.Windows.Forms.Label();
+            this.txbWo = new System.Windows.Forms.MaskedTextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.txtPathLog = new System.Windows.Forms.TextBox();
-            this.lblAddModel = new System.Windows.Forms.Label();
             this.txtASSYNo = new System.Windows.Forms.TextBox();
             this.ckChangeDate = new System.Windows.Forms.CheckBox();
-            this.btnExportToCSV = new System.Windows.Forms.Button();
-            this.btnGenerateSerial = new System.Windows.Forms.Button();
             this.txtSerialBegin = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.cboModels = new System.Windows.Forms.ComboBox();
@@ -52,6 +50,10 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.lblPathLog = new System.Windows.Forms.Label();
+            this.lblAddModel = new System.Windows.Forms.Label();
+            this.btnExportToCSV = new System.Windows.Forms.Button();
+            this.btnGenerateSerial = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
@@ -59,6 +61,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txbWo);
+            this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.lblPathLog);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.txtPathLog);
@@ -82,21 +86,26 @@
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(5, 10);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(754, 133);
+            this.groupBox1.Size = new System.Drawing.Size(754, 157);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options";
             // 
-            // lblPathLog
+            // txbWo
             // 
-            this.lblPathLog.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblPathLog.Enabled = false;
-            this.lblPathLog.Image = global::PrintLabel.App.Properties.Resources.folder_saved_search_16;
-            this.lblPathLog.Location = new System.Drawing.Point(237, 26);
-            this.lblPathLog.Name = "lblPathLog";
-            this.lblPathLog.Size = new System.Drawing.Size(27, 20);
-            this.lblPathLog.TabIndex = 17;
-            this.lblPathLog.Click += new System.EventHandler(this.lblPathLog_Click);
+            this.txbWo.Location = new System.Drawing.Point(344, 127);
+            this.txbWo.Name = "txbWo";
+            this.txbWo.Size = new System.Drawing.Size(113, 20);
+            this.txbWo.TabIndex = 19;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(309, 134);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(29, 13);
+            this.label8.TabIndex = 18;
+            this.label8.Text = "WO:";
             // 
             // label7
             // 
@@ -114,17 +123,6 @@
             this.txtPathLog.Name = "txtPathLog";
             this.txtPathLog.Size = new System.Drawing.Size(160, 20);
             this.txtPathLog.TabIndex = 15;
-            // 
-            // lblAddModel
-            // 
-            this.lblAddModel.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblAddModel.Enabled = false;
-            this.lblAddModel.Image = global::PrintLabel.App.Properties.Resources.plus_16;
-            this.lblAddModel.Location = new System.Drawing.Point(468, 26);
-            this.lblAddModel.Name = "lblAddModel";
-            this.lblAddModel.Size = new System.Drawing.Size(27, 23);
-            this.lblAddModel.TabIndex = 14;
-            this.lblAddModel.Click += new System.EventHandler(this.lblAddModel_Click);
             // 
             // txtASSYNo
             // 
@@ -146,37 +144,6 @@
             this.ckChangeDate.Text = "Change date";
             this.ckChangeDate.UseVisualStyleBackColor = true;
             this.ckChangeDate.CheckedChanged += new System.EventHandler(this.ckChangeDate_CheckedChanged);
-            // 
-            // btnExportToCSV
-            // 
-            this.btnExportToCSV.Enabled = false;
-            this.btnExportToCSV.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExportToCSV.ForeColor = System.Drawing.Color.Maroon;
-            this.btnExportToCSV.Image = global::PrintLabel.App.Properties.Resources.file_formats3_csv_32;
-            this.btnExportToCSV.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnExportToCSV.Location = new System.Drawing.Point(523, 71);
-            this.btnExportToCSV.Name = "btnExportToCSV";
-            this.btnExportToCSV.Size = new System.Drawing.Size(138, 37);
-            this.btnExportToCSV.TabIndex = 11;
-            this.btnExportToCSV.Text = "Export to CSV";
-            this.btnExportToCSV.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnExportToCSV.UseVisualStyleBackColor = true;
-            this.btnExportToCSV.Click += new System.EventHandler(this.btnExportToCSV_Click);
-            // 
-            // btnGenerateSerial
-            // 
-            this.btnGenerateSerial.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGenerateSerial.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
-            this.btnGenerateSerial.Image = global::PrintLabel.App.Properties.Resources._1479456864_Streamline_75;
-            this.btnGenerateSerial.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGenerateSerial.Location = new System.Drawing.Point(523, 24);
-            this.btnGenerateSerial.Name = "btnGenerateSerial";
-            this.btnGenerateSerial.Size = new System.Drawing.Size(138, 40);
-            this.btnGenerateSerial.TabIndex = 10;
-            this.btnGenerateSerial.Text = "Generate Serial";
-            this.btnGenerateSerial.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnGenerateSerial.UseVisualStyleBackColor = true;
-            this.btnGenerateSerial.Click += new System.EventHandler(this.btnGenerateSerial_Click);
             // 
             // txtSerialBegin
             // 
@@ -290,10 +257,10 @@
             this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(5, 143);
+            this.dataGridView1.Location = new System.Drawing.Point(5, 167);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(754, 499);
+            this.dataGridView1.Size = new System.Drawing.Size(754, 475);
             this.dataGridView1.TabIndex = 1;
             // 
             // errorProvider1
@@ -304,6 +271,59 @@
             // 
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // lblPathLog
+            // 
+            this.lblPathLog.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblPathLog.Enabled = false;
+            this.lblPathLog.Image = global::PrintLabel.App.Properties.Resources.folder_saved_search_16;
+            this.lblPathLog.Location = new System.Drawing.Point(237, 26);
+            this.lblPathLog.Name = "lblPathLog";
+            this.lblPathLog.Size = new System.Drawing.Size(27, 20);
+            this.lblPathLog.TabIndex = 17;
+            this.lblPathLog.Click += new System.EventHandler(this.lblPathLog_Click);
+            // 
+            // lblAddModel
+            // 
+            this.lblAddModel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblAddModel.Enabled = false;
+            this.lblAddModel.Image = global::PrintLabel.App.Properties.Resources.plus_16;
+            this.lblAddModel.Location = new System.Drawing.Point(468, 26);
+            this.lblAddModel.Name = "lblAddModel";
+            this.lblAddModel.Size = new System.Drawing.Size(27, 23);
+            this.lblAddModel.TabIndex = 14;
+            this.lblAddModel.Click += new System.EventHandler(this.lblAddModel_Click);
+            // 
+            // btnExportToCSV
+            // 
+            this.btnExportToCSV.Enabled = false;
+            this.btnExportToCSV.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExportToCSV.ForeColor = System.Drawing.Color.Maroon;
+            this.btnExportToCSV.Image = global::PrintLabel.App.Properties.Resources.file_formats3_csv_32;
+            this.btnExportToCSV.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnExportToCSV.Location = new System.Drawing.Point(523, 71);
+            this.btnExportToCSV.Name = "btnExportToCSV";
+            this.btnExportToCSV.Size = new System.Drawing.Size(138, 37);
+            this.btnExportToCSV.TabIndex = 11;
+            this.btnExportToCSV.Text = "Export to CSV";
+            this.btnExportToCSV.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnExportToCSV.UseVisualStyleBackColor = true;
+            this.btnExportToCSV.Click += new System.EventHandler(this.btnExportToCSV_Click);
+            // 
+            // btnGenerateSerial
+            // 
+            this.btnGenerateSerial.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGenerateSerial.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.btnGenerateSerial.Image = global::PrintLabel.App.Properties.Resources._1479456864_Streamline_75;
+            this.btnGenerateSerial.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnGenerateSerial.Location = new System.Drawing.Point(523, 24);
+            this.btnGenerateSerial.Name = "btnGenerateSerial";
+            this.btnGenerateSerial.Size = new System.Drawing.Size(138, 40);
+            this.btnGenerateSerial.TabIndex = 10;
+            this.btnGenerateSerial.Text = "Generate Serial";
+            this.btnGenerateSerial.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnGenerateSerial.UseVisualStyleBackColor = true;
+            this.btnGenerateSerial.Click += new System.EventHandler(this.btnGenerateSerial_Click);
             // 
             // usLibraOEM
             // 
@@ -345,8 +365,10 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.TextBox txtASSYNo;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label lblPathLog;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txtPathLog;
+        private System.Windows.Forms.MaskedTextBox txbWo;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label lblPathLog;
     }
 }

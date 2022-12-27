@@ -12,7 +12,7 @@ namespace PrintLabel.App.Controls
         private string path = AppDomain.CurrentDomain.BaseDirectory + @"Configs\ModelsLibraOEM.txt";
         private string pathLog = @"C:\Logs\LibraOEM";
         List<LibraOEM> lists = new List<LibraOEM>();
-        private ModelLibraOEM _model = new ModelLibraOEM(); 
+        private ModelLibraOEM _model = new ModelLibraOEM();
         public usLibraOEM()
         {
             InitializeComponent();
@@ -144,6 +144,10 @@ namespace PrintLabel.App.Controls
             {
                 return;
             }
+            else if (FieldError(txbWo) == false)
+            {
+                return;
+            }
             else if (FieldError(txtQuantity) == false)
             {
                 return;
@@ -168,7 +172,7 @@ namespace PrintLabel.App.Controls
                 {
                     lists = new List<LibraOEM>();
                     dataGridView1.DataSource = null;
-                    if(startTo.Length > 5)
+                    if (startTo.Length > 5)
                     {
                         for (int i = 1; i <= qty; i++)
                         {
@@ -265,7 +269,7 @@ namespace PrintLabel.App.Controls
             {
                 MessageBox.Show($"Error:\n{ex.Message}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
+
         }
 
 
@@ -318,7 +322,7 @@ namespace PrintLabel.App.Controls
                     Name = array[0],
                     Code = array[1],
                     REV = array[2],
-                    ASSYNo=array[3],
+                    ASSYNo = array[3],
                 };
                 txtASSYNo.Text = _model.ASSYNo;
                 string year = cboYear.Text;
@@ -340,7 +344,7 @@ namespace PrintLabel.App.Controls
                     string strContent = Ultils.ReadLastLine(pathFile, Encoding.ASCII, "\n");
                     string[] value = strContent.Split(',');
                     txtSerialBegin.Text = value[3];
-                    
+
                 }
                 txtQuantity.Focus();
             }
@@ -435,6 +439,6 @@ namespace PrintLabel.App.Controls
             }
         }
 
-        
+
     }
 }

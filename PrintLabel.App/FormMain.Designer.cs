@@ -35,6 +35,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelSidebarLeft = new System.Windows.Forms.Panel();
+            this.btnPrintAgain = new System.Windows.Forms.Button();
             this.btn6ThA3sOEMMain = new System.Windows.Forms.Button();
             this.btnAssyMainA3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -123,6 +124,7 @@
             // panelSidebarLeft
             // 
             this.panelSidebarLeft.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panelSidebarLeft.Controls.Add(this.btnPrintAgain);
             this.panelSidebarLeft.Controls.Add(this.btn6ThA3sOEMMain);
             this.panelSidebarLeft.Controls.Add(this.btnAssyMainA3);
             this.panelSidebarLeft.Controls.Add(this.button2);
@@ -133,6 +135,21 @@
             this.panelSidebarLeft.Name = "panelSidebarLeft";
             this.panelSidebarLeft.Size = new System.Drawing.Size(171, 525);
             this.panelSidebarLeft.TabIndex = 1;
+            // 
+            // btnPrintAgain
+            // 
+            this.btnPrintAgain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btnPrintAgain.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPrintAgain.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnPrintAgain.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPrintAgain.ForeColor = System.Drawing.Color.White;
+            this.btnPrintAgain.Location = new System.Drawing.Point(0, 213);
+            this.btnPrintAgain.Name = "btnPrintAgain";
+            this.btnPrintAgain.Size = new System.Drawing.Size(171, 61);
+            this.btnPrintAgain.TabIndex = 7;
+            this.btnPrintAgain.Text = "Print Again";
+            this.btnPrintAgain.UseVisualStyleBackColor = false;
+            this.btnPrintAgain.Click += new System.EventHandler(this.btnPrintAgain_Click);
             // 
             // btn6ThA3sOEMMain
             // 
@@ -336,6 +353,7 @@
         private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.Button btnAssyMainA3;
         private System.Windows.Forms.Button btn6ThA3sOEMMain;
+        private System.Windows.Forms.Button btnPrintAgain;
     }
 }
 
