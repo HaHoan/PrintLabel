@@ -181,14 +181,16 @@ namespace PrintLabel.App
                 return value;
             }
         }
-        public static void SaveToDb(DataGridView gridIn, string orderNo)
+
+        public static string SaveToDb(DataGridView gridIn, string orderNo)
         {
-            var kyoResponsitory = new PMS_Kyo_InitResonsibility();
+            var kyoResponsitory = new PMS_Kyo_InitResponsibility();
+            var kyoModelResponsitory = new PMS_Kyo_ModelResponsibility();
             if (gridIn.RowCount > 0)
             {
                 DataGridViewRow dr = new DataGridViewRow();
                 var list = new List<PMS_Kyo_Init>();
-                for (int j = 0; j <= gridIn.Rows.Count - 1; j++)
+                for (int j = 0; j < gridIn.Rows.Count; j++)
                 {
                     dr = gridIn.Rows[j];
                     var createTime = DateTime.Now;
@@ -202,9 +204,21 @@ namespace PrintLabel.App
                         ASSY_NO = dr.Cells[1].Value.ToString()
                     });
                 }
-                kyoResponsitory.AddList(list);
-            }
 
+                var result = kyoResponsitory.AddList(list);
+                if (result == "OK")
+                {
+                    var lastBarcode = list[gridIn.Rows.Count - 1];
+                    result = kyoModelResponsitory.UpdateLastBarcode(new PMS_Kyo_Model()
+                    {
+                        PRODUCT_ID = lastBarcode.PRODUCT_ID,
+                        LATEST_BARCODE = lastBarcode.BOARD_NO
+                    });
+                }
+                return result;
+
+            }
+            return "OK";
         }
 
         /// <summary>
@@ -401,11 +415,11 @@ namespace PrintLabel.App
             return null;
         }
 
-        public static List<OEMMains> MakeSerial(OEMMainEntity entity, string startNo, double qty, Dictionary<string, int> dic, string month, string year)
+        public static List<OEMMains> MakeSerial(PMS_Kyo_Model entity, string startNo, double qty, Dictionary<string, int> dic, string month, string year)
         {
             List<OEMMains> result = new List<OEMMains>();
             int start = Convert.ToInt32($"{dic[startNo.Left(1)]}{startNo.Right(4)}");
-            var special = entity.model_Name.LeftOf('-').Right(1);
+            var special = entity.PRODUCT_ID.LeftOf('-').Right(1);
             for (int i = 0; i < qty; i++)
             {
                 //string symbol = startNo.Left(1);
@@ -419,10 +433,10 @@ namespace PrintLabel.App
                 //}
                 result.Add(new OEMMains()
                 {
-                    model = entity.model_Name,
-                    assyNo = "ASSY No. " + entity.assyNo,
-                    barcode = $"{entity.rev}1{special}{year}{month}{symbol}{start.ToString().Right(4)}",
-                    comment = $"{entity.model_Name.Substring(2, 7)}"
+                    model = entity.PRODUCT_ID,
+                    assyNo = "ASSY No. " + entity.ASSY_NO,
+                    barcode = $"{entity.REV_CODE}1{special}{year}{month}{symbol}{start.ToString().Right(4)}",
+                    comment = $"{entity.PRODUCT_ID.Substring(2, 7)}"
                 });
                 start++;
             }

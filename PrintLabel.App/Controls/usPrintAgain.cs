@@ -43,7 +43,7 @@ namespace PrintLabel.App.Controls
         {
             if (e.KeyCode == Keys.Enter && !string.IsNullOrEmpty(txtSerial.Text.Trim()))
             {
-                var kyoResponsibility = new PMS_Kyo_InitResonsibility();
+                var kyoResponsibility = new PMS_Kyo_InitResponsibility();
                 var kyoInit = kyoResponsibility.GetBySerial(txtSerial.Text.Trim());
                 if (kyoInit == null) lblStatus.Text = "Chưa in serial này lần nào.";
                 else if (kyoInit.UPD_TIME != kyoInit.CREATE_AT) lblStatus.Text = "Serial quá số lần in lại.";

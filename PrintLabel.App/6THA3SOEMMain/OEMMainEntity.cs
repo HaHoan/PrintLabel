@@ -11,5 +11,7 @@ namespace PrintLabel.App._6THA3SOEMMain
         public string assyNo { get; set; }
         public string rev { get; set; }
         public string range { get; set; }
+        public string macStart { get; set; }
+        public string macEnd { get; set; }
     }
 }

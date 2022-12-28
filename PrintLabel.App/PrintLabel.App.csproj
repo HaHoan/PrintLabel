@@ -146,6 +146,7 @@
     </Compile>
     <Compile Include="ASSYMainA3\ModelAssyMainA3.cs" />
     <Compile Include="ASSYMainA3\ViewAssyMainA3.cs" />
+    <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\DictionaryMethods.cs" />
     <Compile Include="Common\Error.cs" />
     <Compile Include="Common\ObjectMethods.cs" />
@@ -184,6 +185,8 @@
     <Compile Include="Database\AppConnection.cs" />
     <Compile Include="Database\PMS_Kyo_Init.cs" />
     <Compile Include="Database\PMS_Kyo_InitResonsibility.cs" />
+    <Compile Include="Database\PMS_Kyo_Model.cs" />
+    <Compile Include="Database\PMS_Kyo_ModelResponsibility.cs" />
     <Compile Include="Extension\ConvertData.cs" />
     <Compile Include="FormLogin.cs">
       <SubType>Form</SubType>

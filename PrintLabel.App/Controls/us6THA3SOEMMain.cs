@@ -10,12 +10,15 @@ using PrintLabel.App._6THA3SOEMMain;
 using PrintLabel.App._6THA3SOEM;
 using System.IO;
 using PrintLabel.Common;
+using PrintLabel.App.Database;
+using PrintLabel.App.Common;
 
 namespace PrintLabel.App.Controls
 {
     public partial class us6THA3SOEMMain : UserControl
     {
-        private OEMMainEntity _model = new OEMMainEntity();
+        private PMS_Kyo_Model _model = new PMS_Kyo_Model();
+        private PMS_Kyo_ModelResponsibility pmsModelRes = new PMS_Kyo_ModelResponsibility();
         public Dictionary<string, int> _dic = new Dictionary<string, int>()
         {
             {"A",10 },
@@ -74,7 +77,7 @@ namespace PrintLabel.App.Controls
             {"Z",33 },
         };
         List<OEMMains> lists = new List<OEMMains>();
-        List<OEMMainEntity> _models;
+        List<PMS_Kyo_Model> _models;
         private void PathLog()
         {
             var path = Ultils.GetValueRegistryKey("6TH A3S OEM MAIN", "PathLog");
@@ -174,35 +177,12 @@ namespace PrintLabel.App.Controls
         }
         private void LoadModelsData()
         {
-            _models = new List<OEMMainEntity>();
-            var test = new OEMMainEntity
-            {
-                model_Name = "",
-                assyNo = "",
-                rev = ""
-            };
-            _models.Add(test);
-            var data = Ultils.ReadAllLines(path, Encoding.ASCII);
-            foreach (var item in data)
-            {
-                OEMMainEntity model = null;
-                string[] array = null;
-                if (item.Contains(","))
-                {
-                    array = item.Split(',');
-                    model = new OEMMainEntity
-                    {
-                        model_Name = array[0],
-                        assyNo = array[1],
-                        rev = array[2],
-                        range = array.Length == 4 ? array[3] : ""
-                    };
-                }
-                _models.Add(model);
-            }
+          
+            _models = pmsModelRes.GetListModel(GROUP_ID.OEM);
+            _models.Insert(0, new PMS_Kyo_Model());
             cboModels.DataSource = _models;
-            cboModels.DisplayMember = "model_Name";
-            cboModels.ValueMember = "assyNo";
+            cboModels.DisplayMember = "PRODUCT_ID";
+            cboModels.ValueMember = "ASSY_NO";
         }
         public us6THA3SOEMMain()
         {
@@ -272,31 +252,19 @@ namespace PrintLabel.App.Controls
 
         private void cboModels_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _model = (OEMMainEntity)cboModels.SelectedItem;
-            txtASSYNo.Text = _model.assyNo;
-            txtRev.Text = _model.rev;
-            errorProvider1.Clear();
-            //string selectModel = null;
+           
             if (cboModels.SelectedIndex > 0)
             {
-                //selectModel = cboModels.SelectedValue.ToString();
-
-                //var data = Ultils.ReadAllLines(path, Encoding.ASCII).SingleOrDefault(c => c.Contains(selectModel));
-                //string[] array = data.Split(',');
-                //_model = new OEMMainEntity()
-                //{
-                //    model = array[0],
-                //    assyNo = array[1],
-                //    serial = array[2],
-                //};
+                _model = pmsModelRes.GetModel(cboModels.Text.Trim());
+                txtASSYNo.Text = _model.ASSY_NO;
+                txtRev.Text = _model.REV_CODE;
+                errorProvider1.Clear();
                 string year = cboYear.Text;
                 string month = cboMonth.Text;
-                //string pathFile = $@"{pathLog}\{_model.model_Name}\{ year + month}.csv";
-                string pathFile = $@"{pathLog}\{_model.model_Name}\Data.csv";
-                if (!File.Exists(pathFile))
+                if (string.IsNullOrEmpty(_model.LATEST_BARCODE))
                 {
                     this.txtSerialBegin.Text = "A0001";
-                    if (string.IsNullOrEmpty(_model.range) || _model.range == "A0000-Y9999")
+                    if (_model.MAC_START == "A0000")
                     {
                         this.txtSerialBegin.Text = "A0001";
                     }
@@ -307,20 +275,19 @@ namespace PrintLabel.App.Controls
                 }
                 else
                 {
-                    string strContent = Ultils.ReadLastLine(pathFile, Encoding.ASCII, "\n");
-                    string[] value = strContent.Split(',');
+                    string value = _model.LATEST_BARCODE;
                     string numberStart;
-                    if (string.IsNullOrEmpty(_model.range))
+                    if (_model.MAC_START == "A0000" && _model.MAC_END == "Z9999")
                     {
-                        numberStart = Ultils.GetNumberStart(value[2].Right(5), _dic);
+                        numberStart = Ultils.GetNumberStart(value.Right(5), _dic);
                     }
-                    else if (_model.range == "A0000-Y9999")
+                    else if (_model.MAC_START == "A0000" && _model.MAC_END == "Y9999")
                     {
-                        numberStart = Ultils.GetNumberStart(value[2].Right(5), _dicTypeA);
+                        numberStart = Ultils.GetNumberStart(value.Right(5), _dicTypeA);
                     }
                     else
                     {
-                        numberStart = Ultils.GetNumberStart(value[2].Right(5), _dicTypeZ);
+                        numberStart = Ultils.GetNumberStart(value.Right(5), _dicTypeZ);
                     }
                     txtSerialBegin.Text = numberStart;
                 }
@@ -357,15 +324,12 @@ namespace PrintLabel.App.Controls
             else
             {
                 int index = cboModels.FindStringExact(cboModels.Text);
-                if(index < 0)
+                if (index < 0)
                 {
                     MessageBox.Show("Model not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                     return;
                 }
-                _model = (OEMMainEntity)cboModels.Items[index];
-                //string model = _model.model;
-                //string rev = _model.REV;
-                //string barcode = _model.REV;
+                _model = (PMS_Kyo_Model)cboModels.Items[index];
                 string quantity = txtQuantity.Text;
                 string year = cboYear.Text.Right(1);
                 string month = cboMonth.Text;
@@ -376,38 +340,11 @@ namespace PrintLabel.App.Controls
                 {
                     lists = new List<OEMMains>();
                     dataGridView1.DataSource = null;
-                    //for (int i = 1; i <= qty; i++)
-                    //{
-                    //    var item = new OEMMains
-                    //    {
-                    //        model = _model.model_Name,
-                    //        assyNo = "ASSY No. " + assyNo,
-                    //        barcode = $"{_model.model_Name.Right(8)}*{_model.rev}10Z{month}"
-                    //    };
-                    //    lists.Add(item);
-                    //}
-
-                    //else
-                    //{
-                    //for (int i = 0; i < qty; i++)
-                    //{
-                    //    var item = new LibraOEM
-                    //    {
-                    //        Model = model,
-                    //        ASSY_No = "ASSY No. " + assyNo,
-                    //        REV = rev,
-                    //        Barcode = code + year + month + (Convert.ToInt32(startTo.Substring(startTo.Length - 5, 5)) + i).ToString("00000"),
-                    //    };
-                    //    lists.Add(item);
-                    //}
-                    //}
-                    //int start = Convert.ToInt32($"{dic[startTo.Left(1)]}{startTo.Right(4)}");
-                    //start++;
-                    if (string.IsNullOrEmpty(_model.range))
+                    if (_model.MAC_START == "A0000" && _model.MAC_END == "Z9999")
                     {
                         lists = Ultils.MakeSerial(_model, startTo, qty, _dic, month, year);
                     }
-                    else if (_model.range == "A0000-Y9999")
+                    else if (_model.MAC_START == "A0000" && _model.MAC_END == "Y9999")
                     {
                         lists = Ultils.MakeSerial(_model, startTo, qty, _dicTypeA, month, year);
                     }
@@ -445,14 +382,13 @@ namespace PrintLabel.App.Controls
                 Directory.CreateDirectory(logPrint);
             }
 
-            string folderModel = $@"{pathLog}\{_model.model_Name}";
+            string folderModel = $@"{pathLog}\{_model.PRODUCT_ID}";
             if (!Directory.Exists(folderModel))
             {
                 Directory.CreateDirectory(folderModel);
             }
             string year = cboYear.Text;
             string month = cboMonth.Text;
-            // string fileName = $@"{folderModel}\{year + month}.csv";
             string fileName = $@"{folderModel}\Data.csv";
             if (!File.Exists(fileName))
             {
@@ -468,7 +404,12 @@ namespace PrintLabel.App.Controls
 
             try
             {
-                Ultils.SaveToDb(dataGridView1,txtWO.Text.Trim());
+                var result = Ultils.SaveToDb(dataGridView1, txtWO.Text.Trim());
+                if (result != "OK")
+                {
+                    MessageBox.Show($"Error:\n{result}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 Ultils.WriteCSV(dataGridView1, fileName);
                 Ultils.WriteAppendCSV(dataGridView1, true, newLog);
                 MessageBox.Show("Export success!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -489,70 +430,6 @@ namespace PrintLabel.App.Controls
         protected override void OnVisibleChanged(EventArgs e)
         {
             base.OnVisibleChanged(e);
-
-            if (Visible && !Disposing)
-            {
-                GetModel(Program.ModelSelect);
-            }
-        }
-        private void GetModel(string modelNo)
-        {
-            var data = Ultils.ReadAllLines(path, Encoding.ASCII).FirstOrDefault(r => r.Contains(modelNo));
-            if (data == null)
-            {
-                MessageBox.Show("Model not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                return;
-            }
-            var array = data.Split(',');
-            _model = new OEMMainEntity
-            {
-                model_Name = array[0],
-                assyNo = array[1],
-                rev = array[2],
-                range = array.Length == 4 ? array[3] : ""
-            };
-            cboModels.Text = modelNo;
-            errorProvider1.Clear();
-            txtASSYNo.Text = _model.assyNo;
-            txtRev.Text = _model.rev;
-            errorProvider1.Clear();
-            string year = cboYear.Text;
-            string month = cboMonth.Text;
-            string pathFile = $@"{pathLog}\{_model.model_Name}\Data.csv";
-            if (!File.Exists(pathFile))
-            {
-                this.txtSerialBegin.Text = "A0001";
-                if (string.IsNullOrEmpty(_model.range) || _model.range == "A0000-Y9999")
-                {
-                    this.txtSerialBegin.Text = "A0001";
-                }
-                else
-                {
-                    this.txtSerialBegin.Text = "Z0001";
-                }
-            }
-            else
-            {
-                string strContent = Ultils.ReadLastLine(pathFile, Encoding.ASCII, "\n");
-                string[] value = strContent.Split(',');
-                string numberStart;
-                if (string.IsNullOrEmpty(_model.range))
-                {
-                    numberStart = Ultils.GetNumberStart(value[2].Right(5), _dic);
-                }
-                else if (_model.range == "A0000-Y9999")
-                {
-                    numberStart = Ultils.GetNumberStart(value[2].Right(5), _dicTypeA);
-                }
-                else
-                {
-                    numberStart = Ultils.GetNumberStart(value[2].Right(5), _dicTypeZ);
-                }
-                txtSerialBegin.Text = numberStart;
-            }
-            txtQuantity.Focus();
-
-
         }
 
         private void txtQuantity_KeyPress(object sender, KeyPressEventArgs e)

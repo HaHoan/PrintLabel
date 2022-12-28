@@ -11,7 +11,7 @@ using VBSQLHelper;
 
 namespace PrintLabel.App.Database
 {
-    public class PMS_Kyo_InitResonsibility
+    public class PMS_Kyo_InitResponsibility
     {
         public bool Add(PMS_Kyo_Init model)
         {
@@ -46,16 +46,6 @@ namespace PrintLabel.App.Database
             {
                 var tableTempale = models.ToDataTable();
                 SQLHelper.ExecProcedureNonData($"sp_PMS_Kyo_Init", new { Data = tableTempale });
-                //foreach (var model in models)
-                //{
-                //    var query = "INSERT INTO PMS_Kyo_Init(BOARD_NO,PRODUCT_ID,ORDER_NO, UPD_TIME) VALUES(@BOARD_NO,@PRODUCT_ID,@ORDER_NO, @UPD_TIME)";
-                //    var dp = new DynamicParameters();
-                //    dp.Add("@BOARD_NO", model.BOARD_NO);
-                //    dp.Add("@PRODUCT_ID", model.PRODUCT_ID);
-                //    dp.Add("@ORDER_NO", model.ORDER_NO);
-                //    dp.Add("@UPD_TIME", model.UPD_TIME);
-                //    int res = db.Execute(query, dp);
-                //}
                 return "OK";
             }
             catch (Exception ex)
