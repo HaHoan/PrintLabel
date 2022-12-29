@@ -12,5 +12,7 @@ namespace PrintLabel.App.Common
     public static class GROUP_ID
     {
         public static string OEM = "OEM";
+        public static string ASSYMainA3 = "ASSYMainA3";
+        public static string Mebius = "Mebius";
     }
 }

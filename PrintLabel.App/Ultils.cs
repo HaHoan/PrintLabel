@@ -193,6 +193,7 @@ namespace PrintLabel.App
                 for (int j = 0; j < gridIn.Rows.Count; j++)
                 {
                     dr = gridIn.Rows[j];
+                    if (list.Find(m => m.BOARD_NO == dr.Cells[2].Value.ToString()) != null) break;
                     var createTime = DateTime.Now;
                     list.Add(new PMS_Kyo_Init()
                     {
@@ -206,7 +207,7 @@ namespace PrintLabel.App
                 }
 
                 var result = kyoResponsitory.AddList(list);
-                if (result == "OK")
+                if (result == "OK" && list.Count == gridIn.Rows.Count)
                 {
                     var lastBarcode = list[gridIn.Rows.Count - 1];
                     result = kyoModelResponsitory.UpdateLastBarcode(new PMS_Kyo_Model()

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PrintLabel.App.Common;
+using PrintLabel.App.Database;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,9 +15,10 @@ namespace PrintLabel.App.Controls
         List<string> months = new List<string>();
         List<string> days = new List<string>();
         List<MebiusPanel> lists = new List<MebiusPanel>();
-        private ModelMebiusPanel _model = new ModelMebiusPanel();
+        List<PMS_Kyo_Model> _models = new List<PMS_Kyo_Model>();
+        private PMS_Kyo_Model _model = new PMS_Kyo_Model();
+        private PMS_Kyo_ModelResponsibility pmsModelRes = new PMS_Kyo_ModelResponsibility();
         private string pathLog = @"C:\Logs\Mebius Panel";
-        private string path = AppDomain.CurrentDomain.BaseDirectory + @"Configs\Models.txt";
         private string pathRoot = AppDomain.CurrentDomain.BaseDirectory;
         private string serial = null;
         public usMebiusPanel()
@@ -30,33 +33,11 @@ namespace PrintLabel.App.Controls
 
         private void LoadData()
         {
-            List<ModelMebiusPanel> models = new List<ModelMebiusPanel>();
-            var test = new ModelMebiusPanel
-            {
-                Name = "",
-            };
-            models.Add(test);
-            var data = Ultils.ReadAllLines(path, Encoding.ASCII);
-            foreach (var item in data)
-            {
-                ModelMebiusPanel model = null;
-                string[] array = null;
-                if (item.Contains(","))
-                {
-                    array = item.Split(',');
-                    model = new ModelMebiusPanel
-                    {
-                        Name = array[0],
-                        Code = array[1],
-                    };
-                }
-                models.Add(model);
-            }
-
-
-            cboModels.DataSource = models;
-            cboModels.DisplayMember = "Name";
-            cboModels.ValueMember = "Name";
+            _models = pmsModelRes.GetListModel(GROUP_ID.Mebius);
+            _models.Insert(0, new PMS_Kyo_Model());
+            cboModels.DataSource = _models;
+            cboModels.DisplayMember = "PRODUCT_ID";
+            cboModels.ValueMember = "ASSY_NO";
         }
 
         /// <summary>
@@ -228,7 +209,7 @@ namespace PrintLabel.App.Controls
                 Directory.CreateDirectory(logPrint);
             }
 
-            string folderModel = $@"{pathLog}\{_model.Name}";
+            string folderModel = $@"{pathLog}\{_model.PRODUCT_ID}";
             if (!Directory.Exists(folderModel))
             {
                 Directory.CreateDirectory(folderModel);
@@ -252,16 +233,23 @@ namespace PrintLabel.App.Controls
 
             try
             {
+                var result = Ultils.SaveToDb(dataGridView1, txtWo.Text.Trim());
+                if (result != "OK")
+                {
+                    MessageBox.Show($"Error:\n{result}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 Ultils.WriteCSV(dataGridView1, fileName);
                 Ultils.WriteAppendCSV(dataGridView1, true, newLog);
                 MessageBox.Show("Export success!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-
+                txtWo.ResetText();
                 txtQuantity.ResetText();
                 txtCode.ResetText();
                 cboModels.ResetText();
                 dataGridView1.DataSource = null;
                 dataGridView1.Refresh();
+                cboModels.Focus();
             }
             catch (Exception ex)
             {
@@ -311,19 +299,10 @@ namespace PrintLabel.App.Controls
         private void cboModels_SelectedIndexChanged(object sender, EventArgs e)
         {
             errorProvider1.Clear();
-            string selectModel = null;
             if (cboModels.SelectedIndex > 0)
             {
-                selectModel = cboModels.SelectedValue.ToString();
-
-                var data = Ultils.ReadAllLines(path, Encoding.ASCII).SingleOrDefault(c => c.Contains(selectModel));
-                string[] array = data.Split(',');
-                _model = new ModelMebiusPanel()
-                {
-                    Name = array[0],
-                    Code = array[1]
-                };
-                txtCode.Text = _model.Code;
+                _model = pmsModelRes.GetModel(cboModels.Text.Trim());
+                txtCode.Text = _model.ASSY_NO;
                 txtQuantity.Focus();
             }
         }
@@ -373,35 +352,14 @@ namespace PrintLabel.App.Controls
         protected override void OnVisibleChanged(EventArgs e)
         {
             base.OnVisibleChanged(e);
-
-            if (Visible && !Disposing)
-            {
-                GetModel(Program.ModelSelect);
-            }
         }
-        private void GetModel(string modelNo)
-        {
-            if (FieldError(cboModels) == false)
-            {
-                return;
-            }
-            var data = Ultils.ReadAllLines(path, Encoding.ASCII).SingleOrDefault(c => c.Contains(modelNo));
-            if (data == null)
-            {
-                MessageBox.Show("Model not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                return;
-            }
-            cboModels.Text = modelNo;
-            errorProvider1.Clear();
-            string[] array = data.Split(',');
-            _model = new ModelMebiusPanel()
-            {
-                Name = array[0],
-                Code = array[1]
-            };
-            txtCode.Text = _model.Code;
-            txtQuantity.Focus();
 
+        private void txtWo_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnGenerateSerial.PerformClick();
+            }
         }
     }
 }

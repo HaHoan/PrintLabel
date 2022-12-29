@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PrintLabel.App.Common;
+using PrintLabel.App.Database;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,10 +11,11 @@ namespace PrintLabel.App.Controls
 {
     public partial class usAssyMainA3 : UserControl
     {
-        private string path = AppDomain.CurrentDomain.BaseDirectory + @"Configs\AssyMainA3.txt";
         private string pathLog = null;
         List<ViewAssyMainA3> lists = new List<ViewAssyMainA3>();
-        private ModelAssyMainA3 _model = new ModelAssyMainA3();
+        List<PMS_Kyo_Model> _models = new List<PMS_Kyo_Model>();
+        private PMS_Kyo_Model _model = new PMS_Kyo_Model();
+        private PMS_Kyo_ModelResponsibility pmsModelRes = new PMS_Kyo_ModelResponsibility();
         public usAssyMainA3()
         {
             InitializeComponent();
@@ -25,31 +28,11 @@ namespace PrintLabel.App.Controls
         /// </summary>
         private void LoadModelsData()
         {
-            List<ModelAssyMainA3> models = new List<ModelAssyMainA3>();
-            var test = new ModelAssyMainA3
-            {
-                Model = "",
-            };
-            models.Add(test);
-            var data = Ultils.ReadAllLines(path, Encoding.ASCII);
-            foreach (var item in data)
-            {
-                ModelAssyMainA3 model = null;
-                string[] array = null;
-                if (item.Contains(","))
-                {
-                    array = item.Split(',');
-                    model = new ModelAssyMainA3
-                    {
-                        Model = array[0],
-                        AssyNo = array[1],
-                    };
-                }
-                models.Add(model);
-            }
-            cboModels.DataSource = models;
-            cboModels.DisplayMember = "Model";
-            cboModels.ValueMember = "Model";
+            _models = pmsModelRes.GetListModel(GROUP_ID.ASSYMainA3);
+            _models.Insert(0, new PMS_Kyo_Model());
+            cboModels.DataSource = _models;
+            cboModels.DisplayMember = "PRODUCT_ID";
+            cboModels.ValueMember = "ASSY_NO";
         }
 
         /// <summary>
@@ -91,9 +74,9 @@ namespace PrintLabel.App.Controls
             }
             else
             {
-                string model = _model.Model;
-                string assyNo = $"ASSY No. {_model.AssyNo}";
-                string barcode = _model.AssyNo.Substring(0, 10);
+                string model = _model.PRODUCT_ID;
+                string assyNo = $"ASSY No. {_model.ASSY_NO}";
+                string barcode = _model.ASSY_NO.Substring(0, 10);
 
                 string quantity = txtQuantity.Text;
                 double qty = double.Parse(quantity);
@@ -112,7 +95,6 @@ namespace PrintLabel.App.Controls
                         };
                         lists.Add(item);
                     }
-
 
                     btnExportToCSV.Enabled = true;
                     dataGridView1.DataSource = lists;
@@ -152,13 +134,13 @@ namespace PrintLabel.App.Controls
                 Directory.CreateDirectory(logPrint);
             }
 
-            string folderModel = $@"{pathLog}\{_model.Model}";
+            string folderModel = $@"{pathLog}\{_model.PRODUCT_ID}";
             if (!Directory.Exists(folderModel))
             {
                 Directory.CreateDirectory(folderModel);
             }
 
-            string fileName = $@"{folderModel}\{_model.Model}.csv";
+            string fileName = $@"{folderModel}\{_model.PRODUCT_ID}.csv";
             //string fileName = $@"{pathLog}\{_model.Name + year + month}.csv";
             if (!File.Exists(fileName))
             {
@@ -174,43 +156,29 @@ namespace PrintLabel.App.Controls
 
             try
             {
+                var result = Ultils.SaveToDb(dataGridView1, txtWo.Text.Trim());
+                if (result != "OK")
+                {
+                    MessageBox.Show($"Error:\n{result}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 Ultils.WriteCSV(dataGridView1, fileName);
                 Ultils.WriteAppendCSV(dataGridView1, true, newLog);
                 MessageBox.Show("Export success!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                txtWo.ResetText();
                 txtQuantity.ResetText();
                 cboModels.ResetText();
                 txtASSYNo.ResetText();
                 dataGridView1.DataSource = null;
                 dataGridView1.Refresh();
+                cboModels.Focus();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error:\n{ex.Message}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-        }
-        public void GetModel(string modelNo)
-        {
-            if (usCommon.FieldError(cboModels,errorProvider1) == false) return;
-            var data = Ultils.ReadAllLines(path, Encoding.ASCII).SingleOrDefault(c => c.Contains(modelNo));
-            if (data == null)
-            {
-                MessageBox.Show("Model not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                return;
-            }
-            string[] array = data.Split(',');
-            _model = new ModelAssyMainA3()
-            {
-                Model = array[0],
-                AssyNo = array[1],
-            };
-            cboModels.Text = modelNo;
-            txtASSYNo.Text = _model.AssyNo;
-            dataGridView1.DataSource = null;
-            dataGridView1.Refresh();
-            txtQuantity.ResetText();
-            txtQuantity.Focus();
         }
 
         private void txtQuantity_TextChanged(object sender, EventArgs e)
@@ -230,19 +198,10 @@ namespace PrintLabel.App.Controls
         private void cboModels_SelectedIndexChanged(object sender, EventArgs e)
         {
             errorProvider1.Clear();
-            string selectModel = null;
             if (cboModels.SelectedIndex > 0)
             {
-                selectModel = cboModels.SelectedValue.ToString();
-
-                var data = Ultils.ReadAllLines(path, Encoding.ASCII).SingleOrDefault(c => c.Contains(selectModel));
-                string[] array = data.Split(',');
-                _model = new ModelAssyMainA3()
-                {
-                    Model = array[0],
-                    AssyNo = array[1],
-                };
-                txtASSYNo.Text = _model.AssyNo;
+                _model = pmsModelRes.GetModel(cboModels.Text.Trim());
+                txtASSYNo.Text = _model.ASSY_NO;
                 dataGridView1.DataSource = null;
                 dataGridView1.Refresh();
                 txtQuantity.ResetText();
@@ -341,10 +300,13 @@ namespace PrintLabel.App.Controls
         protected override void OnVisibleChanged(EventArgs e)
         {
             base.OnVisibleChanged(e);
+        }
 
-            if (Visible && !Disposing)
+        private void txtWo_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
             {
-                GetModel(Program.ModelSelect);
+                btnGenerateSerial.PerformClick();
             }
         }
     }

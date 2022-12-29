@@ -177,7 +177,6 @@ namespace PrintLabel.App.Controls
         }
         private void LoadModelsData()
         {
-          
             _models = pmsModelRes.GetListModel(GROUP_ID.OEM);
             _models.Insert(0, new PMS_Kyo_Model());
             cboModels.DataSource = _models;

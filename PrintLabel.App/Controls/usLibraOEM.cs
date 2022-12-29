@@ -254,6 +254,12 @@ namespace PrintLabel.App.Controls
 
             try
             {
+                var result = Ultils.SaveToDb(dataGridView1, txbWo.Text.Trim());
+                if (result != "OK")
+                {
+                    MessageBox.Show($"Error:\n{result}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 Ultils.WriteCSV(dataGridView1, fileName);
                 Ultils.WriteAppendCSV(dataGridView1, true, newLog);
                 MessageBox.Show("Export success!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -439,6 +445,12 @@ namespace PrintLabel.App.Controls
             }
         }
 
-
+        private void txbWo_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnGenerateSerial.PerformClick();
+            }
+        }
     }
 }

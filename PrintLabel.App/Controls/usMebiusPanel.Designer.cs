@@ -109,6 +109,7 @@
             this.txtWo.TabIndex = 22;
             this.txtWo.TextChanged += new System.EventHandler(this.txtQuantity_TextChanged);
             this.txtWo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtQuantity_KeyPress);
+            this.txtWo.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtWo_PreviewKeyDown);
             // 
             // lblPathLog
             // 

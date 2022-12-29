@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PrintLabel.App.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,7 +25,10 @@ namespace PrintLabel.App.Database
         {
             try
             {
-                SQLHelper.ExecQueryNonData($"UPDATE PMS_Kyo_Model SET LATEST_BARCODE = '{model.LATEST_BARCODE}' WHERE PRODUCT_ID = '{model.PRODUCT_ID}'");
+                if(model.GROUP_ID == GROUP_ID.OEM)
+                {
+                    SQLHelper.ExecQueryNonData($"UPDATE PMS_Kyo_Model SET LATEST_BARCODE = '{model.LATEST_BARCODE}' WHERE PRODUCT_ID = '{model.PRODUCT_ID}'");
+                }
                 return "OK";
             }
             catch (Exception ex)

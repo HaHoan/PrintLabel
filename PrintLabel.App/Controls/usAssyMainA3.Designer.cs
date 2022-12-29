@@ -30,6 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtWo = new System.Windows.Forms.MaskedTextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.lblPathLog = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.txtPathLog = new System.Windows.Forms.TextBox();
@@ -45,8 +47,6 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.txtWo = new System.Windows.Forms.MaskedTextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
@@ -76,6 +76,24 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options";
+            // 
+            // txtWo
+            // 
+            this.txtWo.Location = new System.Drawing.Point(344, 104);
+            this.txtWo.Mask = "0000000000";
+            this.txtWo.Name = "txtWo";
+            this.txtWo.Size = new System.Drawing.Size(113, 20);
+            this.txtWo.TabIndex = 19;
+            this.txtWo.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtWo_PreviewKeyDown);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(307, 107);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 13);
+            this.label1.TabIndex = 18;
+            this.label1.Text = "WO:";
             // 
             // lblPathLog
             // 
@@ -226,23 +244,6 @@
             // 
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // txtWo
-            // 
-            this.txtWo.Location = new System.Drawing.Point(344, 104);
-            this.txtWo.Mask = "0000000000";
-            this.txtWo.Name = "txtWo";
-            this.txtWo.Size = new System.Drawing.Size(113, 20);
-            this.txtWo.TabIndex = 19;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(307, 107);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(29, 13);
-            this.label1.TabIndex = 18;
-            this.label1.Text = "WO:";
             // 
             // usAssyMainA3
             // 
