@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PrintLabel.App.Common;
+using PrintLabel.App.Database;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,8 +14,7 @@ namespace PrintLabel.App._6THA3SOEMMain
 {
     public partial class FormModel6ThA3sOEMMain : Form
     {
-        private string path = AppDomain.CurrentDomain.BaseDirectory + @"Configs\ModelsOEM.txt";
-
+        private PMS_Kyo_ModelResponsibility pmsModelRes = new PMS_Kyo_ModelResponsibility();
         bool FieldError(Control control)
         {
             if (control.Text == "" || control.Text == null)
@@ -27,30 +28,7 @@ namespace PrintLabel.App._6THA3SOEMMain
         }
         private void LoadModelsData()
         {
-            List<OEMMainEntity> models = new List<OEMMainEntity>();
-            if (!File.Exists(path))
-            {
-                File.Create(path).Dispose();
-            }
-            var data = Ultils.ReadAllLines(path, Encoding.ASCII);
-            foreach (var item in data)
-            {
-                OEMMainEntity model = null;
-                string[] array = null;
-                if (item.Contains(","))
-                {
-                    array = item.Split(',');
-                    model = new OEMMainEntity
-                    {
-                        model_Name = array[0],
-                        assyNo = array[1],
-                        rev = array[2],
-                        range = array.Length == 4 ? array[3] : ""
-                    };
-                }
-                models.Add(model);
-            }
-            dataGridView1.DataSource = models;
+            dataGridView1.DataSource = pmsModelRes.GetListModel(GROUP_ID.OEM);
         }
         public FormModel6ThA3sOEMMain()
         {
@@ -76,9 +54,20 @@ namespace PrintLabel.App._6THA3SOEMMain
             else
             {
                 var type = rdA.Checked ? rdA.Text : rdZ.Checked ? rdZ.Text : "";
-                string content = $"{txtName.Text},{txtASSYNo.Text},{txtRev.Text},{type}";
-                Ultils.Write(path, content);
-
+                var result = pmsModelRes.SaveToDb(new PMS_Kyo_Model()
+                {
+                    PRODUCT_ID = txtName.Text.Trim(),
+                    GROUP_ID = GROUP_ID.OEM,
+                    ASSY_NO = txtASSYNo.Text.Trim(),
+                    MAC_START = rdZ.Checked ? "Z0000" : "A0000",
+                    MAC_END = rdA.Checked ? "Y9999" : "Z9999",
+                    MODIFIED_AT = DateTime.Now
+                });
+                if(result != "OK")
+                {
+                    MessageBox.Show(result);
+                    return;
+                }
                 LoadModelsData();
                 MessageBox.Show("Save success!");
                 txtName.ResetText();
@@ -86,14 +75,19 @@ namespace PrintLabel.App._6THA3SOEMMain
                 txtRev.ResetText();
             }
         }
-        string content = null;
+        string model = null;
 
         private void btnDel_Click(object sender, EventArgs e)
         {
             DialogResult dialogResult = MessageBox.Show("Are you want to delete?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (dialogResult == DialogResult.Yes)
             {
-                Ultils.RemoveLine(path, content);
+                var result = pmsModelRes.Delete(model);
+                if(result != "OK")
+                {
+                    MessageBox.Show(result);
+                    return;
+                }
                 LoadModelsData();
             }
         }
@@ -108,13 +102,14 @@ namespace PrintLabel.App._6THA3SOEMMain
                 txtName.Text = value1;
                 txtASSYNo.Text = value2;
                 txtRev.Text = rev;
-                content = $"{value1},{value2}";
+                model = value1;
             }
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            Ultils.WriteTxtFromDataGridView(dataGridView1, path);
+            Ultils.WriteTxtFromDataGridView(dataGridView1);
+            LoadModelsData();
         }
     }
 }

@@ -90,7 +90,7 @@ namespace PrintLabel.App._6THA3SOEM
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            Ultils.WriteTxtFromDataGridView(dataGridView1, path);
+            Ultils.WriteTxtFromDataGridView(dataGridView1);
         }
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)

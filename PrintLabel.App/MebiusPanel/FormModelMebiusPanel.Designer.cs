@@ -30,32 +30,30 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormModelLibiraOEM));
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.btnAdd = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnDelete = new System.Windows.Forms.Button();
             this.txtCode = new System.Windows.Forms.TextBox();
             this.txtModel = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
-            this.btnDelete = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.PRODUCT_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ASSY_NO = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.REV_CODE = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GroupId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BarcodeHeader = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LatestBarcode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ModifiedBy = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ModifiedAt = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MacStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MacEnd = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.AllowUserToOrderColumns = true;
-            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(5, 120);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(519, 260);
-            this.dataGridView1.TabIndex = 1;
-            this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
             // 
             // errorProvider1
             // 
@@ -90,6 +88,19 @@
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Infomation";
+            // 
+            // btnDelete
+            // 
+            this.btnDelete.Image = global::PrintLabel.App.Properties.Resources.trash_16;
+            this.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnDelete.Location = new System.Drawing.Point(153, 74);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(60, 23);
+            this.btnDelete.TabIndex = 7;
+            this.btnDelete.Text = "Delete";
+            this.btnDelete.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // txtCode
             // 
@@ -137,18 +148,96 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // btnDelete
+            // dataGridView1
             // 
-            this.btnDelete.Image = global::PrintLabel.App.Properties.Resources.trash_16;
-            this.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDelete.Location = new System.Drawing.Point(153, 74);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(60, 23);
-            this.btnDelete.TabIndex = 7;
-            this.btnDelete.Text = "Delete";
-            this.btnDelete.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnDelete.UseVisualStyleBackColor = true;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            this.dataGridView1.AllowUserToOrderColumns = true;
+            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.PRODUCT_ID,
+            this.ASSY_NO,
+            this.REV_CODE,
+            this.GroupId,
+            this.BarcodeHeader,
+            this.LatestBarcode,
+            this.ModifiedBy,
+            this.ModifiedAt,
+            this.MacStart,
+            this.MacEnd});
+            this.dataGridView1.GridColor = System.Drawing.Color.White;
+            this.dataGridView1.Location = new System.Drawing.Point(5, 126);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(519, 251);
+            this.dataGridView1.TabIndex = 8;
+            this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
+            // 
+            // PRODUCT_ID
+            // 
+            this.PRODUCT_ID.DataPropertyName = "PRODUCT_ID";
+            this.PRODUCT_ID.HeaderText = "Model";
+            this.PRODUCT_ID.Name = "PRODUCT_ID";
+            // 
+            // ASSY_NO
+            // 
+            this.ASSY_NO.DataPropertyName = "ASSY_NO";
+            this.ASSY_NO.HeaderText = "Code";
+            this.ASSY_NO.Name = "ASSY_NO";
+            // 
+            // REV_CODE
+            // 
+            this.REV_CODE.DataPropertyName = "REV_CODE";
+            this.REV_CODE.HeaderText = "RevCode";
+            this.REV_CODE.Name = "REV_CODE";
+            this.REV_CODE.Visible = false;
+            // 
+            // GroupId
+            // 
+            this.GroupId.DataPropertyName = "GROUP_ID";
+            this.GroupId.HeaderText = "GroupId";
+            this.GroupId.Name = "GroupId";
+            this.GroupId.Visible = false;
+            // 
+            // BarcodeHeader
+            // 
+            this.BarcodeHeader.DataPropertyName = "BARCODE_HEADER";
+            this.BarcodeHeader.HeaderText = "BarcodeHeader";
+            this.BarcodeHeader.Name = "BarcodeHeader";
+            this.BarcodeHeader.Visible = false;
+            // 
+            // LatestBarcode
+            // 
+            this.LatestBarcode.DataPropertyName = "LATEST_BARCODE";
+            this.LatestBarcode.HeaderText = "LatestBarcode";
+            this.LatestBarcode.Name = "LatestBarcode";
+            this.LatestBarcode.Visible = false;
+            // 
+            // ModifiedBy
+            // 
+            this.ModifiedBy.DataPropertyName = "MODIFIED_BY";
+            this.ModifiedBy.HeaderText = "ModifiedBy";
+            this.ModifiedBy.Name = "ModifiedBy";
+            this.ModifiedBy.Visible = false;
+            // 
+            // ModifiedAt
+            // 
+            this.ModifiedAt.DataPropertyName = "MODIFIED_AT";
+            this.ModifiedAt.HeaderText = "ModifiedAt";
+            this.ModifiedAt.Name = "ModifiedAt";
+            this.ModifiedAt.Visible = false;
+            // 
+            // MacStart
+            // 
+            this.MacStart.DataPropertyName = "MAC_START";
+            this.MacStart.HeaderText = "MacStart";
+            this.MacStart.Name = "MacStart";
+            this.MacStart.Visible = false;
+            // 
+            // MacEnd
+            // 
+            this.MacEnd.DataPropertyName = "MAC_END";
+            this.MacEnd.HeaderText = "MacEnd";
+            this.MacEnd.Name = "MacEnd";
+            this.MacEnd.Visible = false;
             // 
             // FormModelLibiraOEM
             // 
@@ -166,16 +255,15 @@
             this.Padding = new System.Windows.Forms.Padding(5, 15, 5, 0);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Model Libira OEM";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -185,5 +273,16 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PRODUCT_ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ASSY_NO;
+        private System.Windows.Forms.DataGridViewTextBoxColumn REV_CODE;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GroupId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BarcodeHeader;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LatestBarcode;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ModifiedBy;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ModifiedAt;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MacStart;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MacEnd;
     }
 }

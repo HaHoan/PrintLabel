@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PrintLabel.App.Common;
+using PrintLabel.App.Database;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,8 +13,8 @@ namespace PrintLabel.App
 {
     public partial class FormAssyMainA3 : Form
     {
-        private string path = AppDomain.CurrentDomain.BaseDirectory + @"Configs\AssyMainA3.txt";
-        string content = null;
+        private PMS_Kyo_ModelResponsibility pmsModelRes = new PMS_Kyo_ModelResponsibility();
+        string model = null;
         public FormAssyMainA3()
         {
             InitializeComponent();
@@ -23,22 +25,7 @@ namespace PrintLabel.App
         /// </summary>
         private void LoadData()
         {
-            List<ModelAssyMainA3> models = new List<ModelAssyMainA3>();
-            var data = Ultils.ReadAllLines(path, Encoding.ASCII);
-            foreach (var item in data)
-            {
-                ModelAssyMainA3 model = null;
-                string[] array = array = item.Split(',');
-                model = new ModelAssyMainA3
-                {
-                    Model = array[0],
-                    AssyNo = array[1]
-                };
-                models.Add(model);
-            }
-
-
-            dataGridView1.DataSource = models;
+            dataGridView1.DataSource = pmsModelRes.GetListModel(GROUP_ID.ASSYMainA3);
         }
 
         /// <summary>
@@ -70,23 +57,22 @@ namespace PrintLabel.App
             }
             else
             {
-                string modelName = $"{txtModel.Text},{txtCode.Text}";
-                var data = Ultils.ReadAllLines(path, Encoding.ASCII).SingleOrDefault(l => l.Contains(modelName));
-                if (data == null)
+                var result = pmsModelRes.SaveToDb(new PMS_Kyo_Model()
                 {
-                    Ultils.Write(path, modelName);
-                    LoadData();
-                    MessageBox.Show("Save success!");
-
-                    txtModel.ResetText();
-                    txtCode.ResetText();
-                }
-                else
+                    PRODUCT_ID = txtModel.Text.Trim(),
+                    GROUP_ID = GROUP_ID.ASSYMainA3,
+                    ASSY_NO = txtCode.Text.Trim(),
+                    MODIFIED_AT = DateTime.Now
+                });
+                if (result != "OK")
                 {
-                    errorProvider1.SetError(txtModel, "Model already exists!");
-                    txtModel.Focus();
+                    MessageBox.Show(result);
                     return;
                 }
+                LoadData();
+                MessageBox.Show("Save success!");
+                txtModel.ResetText();
+                txtCode.ResetText();
             }
         }
 
@@ -95,7 +81,12 @@ namespace PrintLabel.App
             DialogResult dialogResult = MessageBox.Show("Are you want to delete?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (dialogResult == DialogResult.Yes)
             {
-                Ultils.RemoveLine(path, content);
+                var result = pmsModelRes.Delete(model);
+                if (result != "OK")
+                {
+                    MessageBox.Show(result);
+                    return;
+                }
                 LoadData();
             }
         }
@@ -104,7 +95,8 @@ namespace PrintLabel.App
         {
             try
             {
-                Ultils.WriteTxtFromDataGridView(dataGridView1, path);
+                Ultils.WriteTxtFromDataGridView(dataGridView1);
+                LoadData();
             }
             catch (Exception ex)
             {
@@ -119,8 +111,7 @@ namespace PrintLabel.App
             {
                 string value1 = row.Cells[0].Value.ToString();
                 string value2 = row.Cells[1].Value.ToString();
-
-                content = $"{value1},{value2}";
+                model = value1;
             }
         }
     }

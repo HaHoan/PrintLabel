@@ -99,7 +99,7 @@ namespace PrintLabel.App
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            Ultils.WriteTxtFromDataGridView(dataGridView1, path);
+            Ultils.WriteTxtFromDataGridView(dataGridView1);
         }
 
         private void btnDelete_Click(object sender, EventArgs e)

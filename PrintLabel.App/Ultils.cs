@@ -320,39 +320,35 @@ namespace PrintLabel.App
                 }
             }
         }
-        public static void WriteTxtFromDataGridView(DataGridView gridIn, string outputFile)
+        public static void WriteTxtFromDataGridView(DataGridView gridIn)
         {
             //test to see if the DataGridView has any rows
             if (gridIn.RowCount > 0)
             {
-                string value = "";
                 DataGridViewRow dr = new DataGridViewRow();
-                StreamWriter swOut = new StreamWriter(outputFile, false, Encoding.ASCII);
+                var kyoResponsitory = new PMS_Kyo_ModelResponsibility();
+                var list = new List<PMS_Kyo_Model>();
                 //write DataGridView rows to csv
                 for (int j = 0; j <= gridIn.Rows.Count - 1; j++)
                 {
-                    if (j > 0)
-                    {
-                        swOut.WriteLine();
-                    }
                     dr = gridIn.Rows[j];
-                    for (int i = 0; i <= gridIn.Columns.Count - 1; i++)
+                    var model = dr.Cells["PRODUCT_ID"].Value.ToString();
+                    var code = dr.Cells["ASSY_NO"].Value.ToString();
+                    string rev = "";
+                    if (dr.Cells["REV_CODE"] != null && dr.Cells["REV_CODE"].Value != null)
                     {
-                        if (i > 0)
-                        {
-                            swOut.Write(",");
-                        }
-
-                        value = dr.Cells[i].Value.ToString();
-                        //replace comma's with spaces
-                        value = value.Replace(',', ' ');
-                        //replace embedded newlines with spaces
-                        value = value.Replace(Environment.NewLine, " ");
-                        swOut.Write(value);
+                        rev = dr.Cells["REV_CODE"].Value.ToString();
                     }
+
+                    list.Add(new PMS_Kyo_Model()
+                    {
+                        PRODUCT_ID = model,
+                        ASSY_NO = code,
+                        REV_CODE = rev
+                    });
                 }
-                swOut.WriteLine();
-                swOut.Close();
+                var result = kyoResponsitory.UpdateAllModel(list);
+                MessageBox.Show(result);
             }
         }
 
